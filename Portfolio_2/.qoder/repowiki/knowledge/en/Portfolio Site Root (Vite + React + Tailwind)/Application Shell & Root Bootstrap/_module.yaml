@@ -1,0 +1,10 @@
+schema_version: 1
+module_path: app_shell
+title: Application Shell & Root Bootstrap
+scope:
+    - src/App.jsx
+    - src/main.jsx
+    - src/index.css
+source_files: []
+depends_on: []
+related_to: []

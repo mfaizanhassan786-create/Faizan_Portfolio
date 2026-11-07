@@ -1,0 +1,1 @@
+Top-level Vite/React project scaffold that wires the build pipeline, shared design tokens, and SEO metadata for M. Faizan Hassan's portfolio site.

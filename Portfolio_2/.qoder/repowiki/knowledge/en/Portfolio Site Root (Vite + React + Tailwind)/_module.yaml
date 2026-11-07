@@ -1,0 +1,13 @@
+schema_version: 1
+module_path: ""
+title: Portfolio Site Root (Vite + React + Tailwind)
+scope:
+    - index.html
+    - package.json
+    - vite.config.js
+    - tailwind.config.js
+    - postcss.config.js
+    - .gitignore
+source_files: []
+depends_on: []
+related_to: []
