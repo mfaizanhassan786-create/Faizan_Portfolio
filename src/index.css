@@ -36,6 +36,21 @@ body {
   min-height: 100vh;
 }
 
+.portfolio-card {
+  transition:
+    translate 0.3s cubic-bezier(0.2, 0.75, 0.25, 1),
+    box-shadow 0.3s cubic-bezier(0.2, 0.75, 0.25, 1),
+    border-color 0.3s cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .portfolio-card:hover {
+    translate: 0 -7px;
+    border-color: rgba(108, 59, 219, 0.42);
+    box-shadow: 0 26px 58px rgba(108, 59, 219, 0.13), 0 8px 20px rgba(17, 17, 24, 0.06);
+  }
+}
+
 button,
 input,
 textarea {

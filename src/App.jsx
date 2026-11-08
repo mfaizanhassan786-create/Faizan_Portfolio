@@ -365,7 +365,7 @@ function App() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.1 }} className="flex items-center justify-center">
-              <div className="relative w-full max-w-xl overflow-hidden rounded-[2rem] border border-[var(--color-border)] bg-white/85 p-5 shadow-[0_26px_80px_rgba(17,17,24,0.12)] backdrop-blur-sm sm:p-7">
+              <div className="portfolio-card relative w-full max-w-xl overflow-hidden rounded-[2rem] border border-[var(--color-border)] bg-white/85 p-5 shadow-[0_26px_80px_rgba(17,17,24,0.12)] backdrop-blur-sm sm:p-7">
                 <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-70 [background-image:linear-gradient(to_right,rgba(108,59,219,0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgba(108,59,219,0.045)_1px,transparent_1px)] [background-size:40px_40px]" />
                 <div aria-hidden="true" className="pointer-events-none absolute -right-10 top-4 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(232,189,83,0.15),transparent_70%)]" />
                 <div className="relative">
@@ -415,7 +415,7 @@ function App() {
 
             <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr]">
               <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} className="space-y-6">
-                <div className="flex flex-col gap-5 rounded-[2rem] border border-[var(--color-border)] bg-white p-6 shadow-[0_20px_55px_rgba(17,17,24,0.06)]">
+                <div className="portfolio-card flex flex-col gap-5 rounded-[2rem] border border-[var(--color-border)] bg-white p-6 shadow-[0_20px_55px_rgba(17,17,24,0.06)]">
                   <div className="flex items-start gap-5">
                     <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-[1.4rem] border border-[var(--color-border)] bg-[linear-gradient(135deg,var(--color-purple),var(--color-blue))] text-2xl font-semibold text-white shadow-[0_18px_35px_rgba(108,59,219,0.18)]">
                       {profileImage ? <img src={profileImage} alt="Portrait of M. Faizan Hassan" width="300" height="400" loading="lazy" decoding="async" className="h-full w-full object-cover object-[center_32%]" /> : 'MF'}
@@ -451,7 +451,7 @@ function App() {
                   { icon: Database, title: 'Data & Architecture', description: 'I care deeply about clean design decisions, data handling, and systems that remain understandable as they grow.' },
                   { icon: Rocket, title: 'Learning & Iteration', description: 'My philosophy is grounded in research, technical reflection, and constant refinement to create better software.' },
                 ].map(({ icon: Icon, title, description }) => (
-                  <div key={title} className="rounded-[1.6rem] border border-[var(--color-border)] bg-white p-5 shadow-[0_18px_40px_rgba(17,17,24,0.05)]">
+                  <div key={title} className="portfolio-card rounded-[1.6rem] border border-[var(--color-border)] bg-white p-5 shadow-[0_18px_40px_rgba(17,17,24,0.05)]">
                     <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-soft-purple)] text-[var(--color-purple)]">
                       <Icon className="h-5 w-5" />
                     </div>
@@ -476,7 +476,7 @@ function App() {
 
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {skillCategories.map(({ label, icon: Icon, skills }) => (
-                <motion.div key={label} initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} className="rounded-[2rem] border border-[var(--color-border)] bg-white p-6 shadow-[0_24px_60px_rgba(17,17,24,0.05)] transition hover:-translate-y-1 hover:border-[var(--color-purple)]">
+                <motion.div key={label} initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} className="portfolio-card rounded-[2rem] border border-[var(--color-border)] bg-white p-6 shadow-[0_24px_60px_rgba(17,17,24,0.05)]">
                   <div className="mb-5 flex items-center justify-between">
                     <div className="flex items-center gap-3 text-lg font-semibold text-[var(--color-dark)]">
                       <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--color-soft-purple)] text-[var(--color-purple)]">
@@ -510,7 +510,7 @@ function App() {
 
             <div className="grid gap-7 lg:grid-cols-3">
               {projects.map((project) => (
-                <motion.article key={project.id} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} className="overflow-hidden rounded-[2rem] border border-[var(--color-border)] bg-white shadow-[0_24px_55px_rgba(17,17,24,0.05)]">
+                <motion.article key={project.id} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} className="portfolio-card overflow-hidden rounded-[2rem] border border-[var(--color-border)] bg-white shadow-[0_24px_55px_rgba(17,17,24,0.05)]">
                   <div className="border-b border-[var(--color-border)] bg-[var(--color-offwhite)] p-5">
                     <div className="mb-4 flex items-center justify-between">
                       <span className="rounded-full bg-[var(--color-soft-purple)] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--color-purple)]">{project.number}</span>
@@ -559,7 +559,7 @@ function App() {
 
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
               {certificates.map((certificate, index) => (
-                <motion.button key={`${certificate.title}-${index}`} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} onClick={() => openCertificate(certificate)} className="group rounded-[1.8rem] border border-[var(--color-border)] bg-white p-5 text-left shadow-[0_18px_40px_rgba(17,17,24,0.04)] transition hover:-translate-y-1 hover:border-[var(--color-purple)] hover:shadow-[0_28px_55px_rgba(108,59,219,0.12)]">
+                <motion.button key={`${certificate.title}-${index}`} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} onClick={() => openCertificate(certificate)} className="portfolio-card group rounded-[1.8rem] border border-[var(--color-border)] bg-white p-5 text-left shadow-[0_18px_40px_rgba(17,17,24,0.04)]">
                   <div className="mb-4 flex items-center justify-between">
                     <span className="rounded-full bg-[var(--color-soft-purple)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--color-purple)]">{certificate.type}</span>
                     <span className="text-xs font-medium text-[var(--color-muted)]">{certificate.date}</span>
@@ -594,7 +594,7 @@ function App() {
                   { icon: Globe, label: 'LinkedIn', value: 'm-faizan-hassan-579aa43a7', href: 'https://linkedin.com/in/m-faizan-hassan-579aa43a7/' },
                   { icon: GitBranch, label: 'GitHub', value: 'mfaizanhassan786-create', href: 'https://github.com/mfaizanhassan786-create' },
                 ].map(({ icon: Icon, label, value, href }) => (
-                  <a key={label} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noreferrer' : undefined} className="flex items-center justify-between rounded-[1.5rem] border border-white/10 bg-white/5 p-4 text-white/80 transition hover:border-[var(--color-purple)] hover:bg-white/10">
+                  <a key={label} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noreferrer' : undefined} className="portfolio-card flex items-center justify-between rounded-[1.5rem] border border-white/10 bg-white/5 p-4 text-white/80 transition hover:bg-white/10">
                     <div className="flex items-center gap-4">
                       <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-soft-purple)] text-[var(--color-purple)]">
                         <Icon className="h-5 w-5" />
@@ -609,7 +609,7 @@ function App() {
                 ))}
               </div>
 
-              <form onSubmit={handleFormSubmit} className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+              <form onSubmit={handleFormSubmit} className="portfolio-card rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
                 <div className="grid gap-5 sm:grid-cols-2">
                   <label className="block">
                     <span className="mb-2 block text-sm font-medium text-white/80">Name</span>
@@ -707,7 +707,7 @@ function App() {
                     <p className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-[var(--color-purple)]">Architecture</p>
                     <div className="grid gap-3 md:grid-cols-2">
                       {selectedProject.architecture.map((block) => (
-                        <div key={block.label} className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-offwhite)] p-4">
+                        <div key={block.label} className="portfolio-card rounded-2xl border border-[var(--color-border)] bg-[var(--color-offwhite)] p-4">
                           <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--color-purple)]">{block.label}</p>
                           <p className="mt-2 text-sm text-[var(--color-dark)]">{block.value}</p>
                         </div>
@@ -736,7 +736,7 @@ function App() {
                     </ul>
                   </div>
 
-                  <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-offwhite)] p-4 text-sm text-[var(--color-dark)]">
+                  <div className="portfolio-card rounded-2xl border border-[var(--color-border)] bg-[var(--color-offwhite)] p-4 text-sm text-[var(--color-dark)]">
                     <span className="font-semibold text-[var(--color-purple)]">Outcome:</span> {selectedProject.learnings}
                   </div>
                 </div>
