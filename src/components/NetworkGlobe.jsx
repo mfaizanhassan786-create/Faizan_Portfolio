@@ -172,7 +172,8 @@ export default function NetworkGlobe() {
 
     const animate = (timestamp) => {
       if (!visible || motionPreference.matches) return
-      if (timestamp - lastFrame >= 1000 / 60) {
+      const frameInterval = width < 760 ? 1000 / 30 : 1000 / 60
+      if (timestamp - lastFrame >= frameInterval) {
         frame = timestamp
         lastFrame = timestamp
         draw()

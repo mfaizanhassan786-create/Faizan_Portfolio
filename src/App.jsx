@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
 import {
   ArrowRight,
   ArrowUp,
@@ -22,12 +22,16 @@ import {
   Globe,
   Cpu,
   Layers3,
-  BriefcaseBusiness,
+  Sun,
+  Moon,
 } from 'lucide-react'
 import NetworkGlobe from './components/NetworkGlobe'
+import CosmicBackdrop from './components/CosmicBackdrop'
+import CustomCursor from './components/CustomCursor'
 
-const profileImage = '/images/faizan-hassan-portrait.jpeg'
-const cvUrl = '/documents/Faizan-CV.pdf'
+const publicAsset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
+const profileImage = publicAsset('images/faizan-hassan-portrait.jpeg')
+const cvUrl = publicAsset('documents/Faizan-CV.pdf')
 
 const navItems = [
   { label: 'Home', href: '#home' },
@@ -40,41 +44,36 @@ const navItems = [
 
 const skillCategories = [
   {
-    label: 'Backend Development',
+    label: 'Programming',
     icon: Code2,
-    skills: ['Python', 'FastAPI', 'Node.js', 'REST APIs', 'SQL'],
+    skills: ['Python', 'C++'],
   },
   {
-    label: 'Artificial Intelligence & Data Science',
-    icon: BrainCircuit,
-    skills: ['Machine Learning', 'Deep Learning', 'AI Agents', 'Computer Vision', 'Data Science Fundamentals', 'LLM Integration'],
-  },
-  {
-    label: 'Database Technologies',
+    label: 'Backend Development',
     icon: Database,
-    skills: ['PostgreSQL', 'Neon Database', 'MongoDB', 'Relational Database Design'],
+    skills: ['FastAPI', 'REST APIs', 'PostgreSQL', 'Supabase', 'Neon Database', 'MongoDB', 'Relational Database Design', 'Node.js', 'SQL'],
   },
   {
-    label: 'Frontend Development',
+    label: 'AI & Automation',
+    icon: BrainCircuit,
+    skills: ['Artificial Intelligence', 'Machine Learning', 'Deep Learning', 'AI Agents', 'Computer Vision', 'n8n', 'Automation', 'Pandas', 'NumPy', 'LLM Integration'],
+  },
+  {
+    label: 'Frontend',
     icon: Layers3,
-    skills: ['JavaScript', 'HTML5', 'CSS3', 'React.js', 'Tailwind CSS'],
+    skills: ['React', 'HTML', 'CSS', 'JavaScript', 'Tailwind CSS'],
   },
   {
-    label: 'Automation & Development Tools',
+    label: 'Tools & Workflow',
     icon: Rocket,
-    skills: ['n8n', 'Git', 'GitHub', 'VS Code', 'Linux', 'Command Line'],
-  },
-  {
-    label: 'Professional Skills',
-    icon: BriefcaseBusiness,
-    skills: ['Problem Solving', 'Critical Thinking', 'Technical Research', 'Structured Thinking', 'Continuous Learning'],
+    skills: ['Git', 'GitHub', 'VS Code', 'Linux', 'Command Line', 'Technical Research', 'Problem Solving', 'Continuous Learning'],
   },
 ]
 
 const projects = [
   {
     id: 'isop',
-    number: '01',
+    number: '02',
     title: 'iSOP | Industrial Safety AI',
     category: 'Artificial Intelligence / Computer Vision',
     description:
@@ -98,12 +97,11 @@ const projects = [
       { label: 'Output', value: 'Monitoring insights and operational flags' },
     ],
     learnings: 'This project strengthened my understanding of technical requirements, architecture evaluation, and how to design AI systems around practical industry needs.',
-    link: '#',
-    repo: '#',
+    link: '',
   },
   {
     id: 'flight-management',
-    number: '02',
+    number: '03',
     title: 'Flight Management System',
     category: 'Backend Development / API Engineering',
     description:
@@ -127,12 +125,11 @@ const projects = [
       { label: 'Documentation', value: 'Structured API references and clarity' },
     ],
     learnings: 'The project reinforced the importance of data modelling, validation, and backend structure in building dependable software systems.',
-    link: '#',
-    repo: '#',
+    link: '',
   },
   {
     id: 'document-processing',
-    number: '03',
+    number: '04',
     title: 'AI Document Processing Agent',
     category: 'AI Automation / Workflow Engineering',
     description:
@@ -156,20 +153,41 @@ const projects = [
       { label: 'Output', value: 'Structured JSON results' },
     ],
     learnings: 'This project sharpened my understanding of workflow automation, information extraction, and how AI can improve practical operational efficiency.',
-    link: '#',
-    repo: '#',
+    link: '',
+  },
+  {
+    id: 'sales-inventory-analytics',
+    number: '01',
+    title: 'Sales & Inventory Analytics API',
+    category: 'Backend Development / Data Analytics',
+    description:
+      'An analytics API built with Python, FastAPI, Supabase/PostgreSQL, Pandas, and NumPy.',
+    summary: 'Sales and inventory analytics, built with a Python data and API stack.',
+    technicalFocus: ['Python', 'FastAPI', 'Supabase / PostgreSQL', 'Pandas', 'NumPy'],
+    stack: ['Python', 'FastAPI', 'Supabase', 'PostgreSQL', 'Pandas', 'NumPy'],
+    highlights: [],
+    problem: 'An API focused on sales and inventory analytics.',
+    approach: '',
+    architecture: [],
+    learnings: '',
+    link: '',
   },
 ]
 
 const certificates = [
-  { title: 'Python Essentials 1', issuer: 'Cisco Networking Academy', date: '22 Feb 2026', type: 'Verified', image: '/certificates/python-essentials-1.png' },
-  { title: 'Cybersecurity Essentials', issuer: 'Cisco Networking Academy · Saylani Welfare International Trust', date: '11 Apr 2026', type: 'Verified', image: '/certificates/cybersecurity-essentials.png' },
-  { title: 'Introduction to Modern AI', issuer: 'Cisco Networking Academy · Saylani Welfare International Trust', date: '08 Mar 2026', type: 'Verified', image: '/certificates/modern-ai.png' },
-  { title: 'Cybersecurity Essentials (Batch 1)', issuer: 'Saylani Mass Training Programme', date: 'Dec 2025 – Apr 2026', type: 'Verified', image: '/certificates/smit-cybersecurity-essentials.png' },
-  { title: 'Critical Thinking in the AI Era', issuer: 'HP LIFE', date: '28 Feb 2026', type: 'Verified', image: '/certificates/critical-thinking.png' },
-  { title: 'Youth Survival Workshop', issuer: 'Al Hadid Institute · Al Bakah Institute', date: '09 Feb 2026', type: 'Verified', image: '/certificates/youth-survival.png' },
-  { title: 'Introduction to Cybersecurity', issuer: 'Cisco Networking Academy · Saylani Welfare International Trust', date: '08 Mar 2026', type: 'Verified', image: '/certificates/introduction-to-cybersecurity.png' },
-  { title: 'Artificial Intelligence Using Python', issuer: 'DigiSkills.pk · Virtual University · Ignite', date: '20 Jul 2026', type: 'Verified', image: '/certificates/ai-using-python.png' },
+  { title: 'Python Essentials 1', issuer: 'Cisco Networking Academy', date: '22 Feb 2026', type: 'Verified', image: publicAsset('certificates/python-essentials-1.png') },
+  { title: 'Cybersecurity Essentials', issuer: 'Cisco Networking Academy · Saylani Welfare International Trust', date: '11 Apr 2026', type: 'Verified', image: publicAsset('certificates/cybersecurity-essentials.png') },
+  { title: 'Introduction to Modern AI', issuer: 'Cisco Networking Academy · Saylani Welfare International Trust', date: '08 Mar 2026', type: 'Verified', image: publicAsset('certificates/modern-ai.png') },
+  { title: 'Cybersecurity Essentials (Batch 1)', issuer: 'Saylani Mass Training Programme', date: 'Dec 2025 – Apr 2026', type: 'Verified', image: publicAsset('certificates/smit-cybersecurity-essentials.png') },
+  { title: 'Critical Thinking in the AI Era', issuer: 'HP LIFE', date: '28 Feb 2026', type: 'Verified', image: publicAsset('certificates/critical-thinking.png') },
+  { title: 'Youth Survival Workshop', issuer: 'Al Hadid Institute · Al Bakah Institute', date: '09 Feb 2026', type: 'Verified', image: publicAsset('certificates/youth-survival.png') },
+  { title: 'Introduction to Cybersecurity', issuer: 'Cisco Networking Academy · Saylani Welfare International Trust', date: '08 Mar 2026', type: 'Verified', image: publicAsset('certificates/introduction-to-cybersecurity.png') },
+  { title: 'Artificial Intelligence Using Python', issuer: 'DigiSkills.pk · Virtual University · Ignite', date: '20 Jul 2026', type: 'Verified', image: publicAsset('certificates/ai-using-python.png') },
+]
+
+const displayedProjects = [
+  ...projects.filter((project) => project.id === 'sales-inventory-analytics'),
+  ...projects.filter((project) => project.id !== 'sales-inventory-analytics'),
 ]
 
 const socialLinks = [
@@ -184,40 +202,45 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [selectedProject, setSelectedProject] = useState(null)
   const [selectedCertificate, setSelectedCertificate] = useState(null)
-  const [typedWord, setTypedWord] = useState('')
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' })
-
-  const typingWords = useMemo(
-    () => ['Full Stack AI Driven Developer', 'AI & Automation Enthusiast', 'Software Developer'],
-    [],
-  )
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = window.localStorage.getItem('portfolio-theme')
+    if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  })
+  const [showBackToTop, setShowBackToTop] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const progressRef = useRef(null)
 
   useEffect(() => {
-    let wordIndex = 0
-    let charIndex = 0
-    let deleting = false
+    window.localStorage.setItem('portfolio-theme', theme)
+    document.documentElement.dataset.theme = theme
+  }, [theme])
 
-    const interval = setInterval(() => {
-      const current = typingWords[wordIndex]
-      if (!deleting) {
-        charIndex += 1
-        setTypedWord(current.slice(0, charIndex))
-        if (charIndex === current.length) {
-          deleting = true
-          setTimeout(() => {}, 1200)
-        }
-      } else {
-        charIndex -= 1
-        setTypedWord(current.slice(0, charIndex))
-        if (charIndex === 0) {
-          deleting = false
-          wordIndex = (wordIndex + 1) % typingWords.length
-        }
-      }
-    }, deleting ? 55 : 120)
+  useEffect(() => {
+    let frame = 0
+    const updateScroll = () => {
+      if (frame) return
+      frame = window.requestAnimationFrame(() => {
+        frame = 0
+        const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight
+        const progress = scrollableHeight > 0 ? (window.scrollY / scrollableHeight) * 100 : 0
+        progressRef.current?.querySelector('span')?.style.setProperty('transform', `scaleX(${progress / 100})`)
+        progressRef.current?.setAttribute('aria-valuenow', String(Math.round(progress)))
+        setShowBackToTop(window.scrollY > 560)
+        setIsScrolled(window.scrollY > 16)
+      })
+    }
 
-    return () => clearInterval(interval)
-  }, [typingWords])
+    updateScroll()
+    window.addEventListener('scroll', updateScroll, { passive: true })
+    window.addEventListener('resize', updateScroll)
+    return () => {
+      window.removeEventListener('scroll', updateScroll)
+      window.removeEventListener('resize', updateScroll)
+      window.cancelAnimationFrame(frame)
+    }
+  }, [])
 
   useEffect(() => {
     const sections = document.querySelectorAll('section[id]')
@@ -256,11 +279,25 @@ function App() {
   const openCertificate = (certificate) => setSelectedCertificate(certificate)
 
   return (
-    <div className="bg-[var(--color-offwhite)] text-[var(--color-dark)] selection:bg-[var(--color-purple)] selection:text-white">
-      <header className="sticky top-0 z-40 backdrop-blur-xl border-b border-[rgba(17,17,24,0.08)] bg-[rgba(248,248,252,0.78)]">
+    <MotionConfig reducedMotion="user">
+    <div className={`site-shell ${theme === 'dark' ? 'theme-dark' : ''} bg-[var(--color-offwhite)] text-[var(--color-dark)] selection:bg-[var(--color-purple)] selection:text-white`}>
+      <div
+        ref={progressRef}
+        className="scroll-progress"
+        role="progressbar"
+        aria-label="Page reading progress"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={0}
+      >
+        <span />
+      </div>
+      <CustomCursor />
+      <a href="#main-content" className="skip-link">Skip to content</a>
+      <header className={`site-header sticky top-0 z-40 border backdrop-blur-xl ${isScrolled ? 'is-scrolled' : ''}`}>
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <button className="flex items-center gap-3 text-lg font-semibold text-[var(--color-dark)]" onClick={() => handleNavClick('#home')}>
-            <span className="font-mono text-xl tracking-tight">&lt; MFH /&gt;</span>
+          <button className="flex items-center gap-3 text-lg font-semibold text-[var(--color-dark)]" onClick={() => handleNavClick('#home')} aria-label="Faizan Hassan — home">
+            <span className="font-mono text-xl tracking-tight">&lt; FH /&gt;</span>
           </button>
 
           <nav className="hidden items-center gap-2 md:flex">
@@ -276,6 +313,15 @@ function App() {
           </nav>
 
           <div className="hidden items-center gap-3 md:flex">
+            <button
+              type="button"
+              onClick={() => setTheme((current) => current === 'light' ? 'dark' : 'light')}
+              className="theme-toggle"
+              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+              title={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+            >
+              {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+            </button>
             <a
               href={cvUrl}
               download
@@ -289,14 +335,16 @@ function App() {
           <button
             className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-border)] bg-white text-[var(--color-dark)] md:hidden"
             onClick={() => setMobileMenuOpen((open) => !open)}
-            aria-label="Toggle navigation"
+            aria-label={mobileMenuOpen ? 'Close navigation' : 'Open navigation'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
 
         {mobileMenuOpen && (
-          <div className="border-t border-[var(--color-border)] bg-[rgba(255,255,255,0.95)] px-4 py-4 md:hidden">
+          <div id="mobile-navigation" className="mobile-navigation border-t border-[var(--color-border)] bg-[rgba(255,255,255,0.95)] px-4 py-4 md:hidden">
             <div className="flex flex-col gap-2">
               {navItems.map((item) => (
                 <button
@@ -315,27 +363,36 @@ function App() {
                 <Download className="h-4 w-4" />
                 Download CV
               </a>
+              <button
+                type="button"
+                onClick={() => setTheme((current) => current === 'light' ? 'dark' : 'light')}
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--color-border)] px-5 py-2.5 text-sm font-semibold text-[var(--color-dark)]"
+              >
+                {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                {theme === 'light' ? 'Dark theme' : 'Light theme'}
+              </button>
             </div>
           </div>
         )}
       </header>
 
-      <main>
-        <section id="home" className="relative overflow-hidden pt-16 pb-20 sm:pt-20">
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_80%_20%,rgba(52,120,246,0.10),transparent_28%),radial-gradient(circle_at_18%_10%,rgba(108,59,219,0.10),transparent_20%),radial-gradient(circle_at_78%_72%,rgba(232,189,83,0.12),transparent_25%)]" />
-          <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:px-8">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="flex flex-col justify-center">
+      <main id="main-content" tabIndex={-1}>
+        <section id="home" className="hero-section relative overflow-hidden pt-16 pb-20 sm:pt-20">
+          <CosmicBackdrop className="hero-stars" />
+          <div className="hero-nebula" aria-hidden="true" />
+          <div className="relative z-10 mx-auto grid w-full max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:px-8">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="flex flex-col justify-center">
               <div className="mb-6 flex flex-wrap items-center gap-3 text-sm font-medium">
-                <span className="rounded-full border border-[var(--color-border)] bg-white px-3 py-1.5 text-[var(--color-purple)]">HELLO, I'M</span>
-                <span className="rounded-full bg-[var(--color-soft-purple)] px-3 py-1.5 text-[var(--color-purple)]">Available for opportunities</span>
+                <span className="eyebrow-pill rounded-full border border-[var(--color-border)] bg-white px-3 py-1.5 text-[var(--color-purple)]">FAIZAN HASSAN</span>
+                <span className="eyebrow-pill rounded-full bg-[var(--color-soft-purple)] px-3 py-1.5 text-[var(--color-purple)]">AI · BACKEND · AUTOMATION</span>
               </div>
 
-              <h1 className="max-w-xl text-5xl font-semibold tracking-[-0.06em] text-[var(--color-dark)] sm:text-6xl lg:text-[5rem]">
-                M. Faizan Hassan
+              <h1 className="hero-title max-w-3xl text-5xl font-semibold tracking-[-0.06em] text-[var(--color-dark)] sm:text-6xl lg:text-[5rem]">
+                Building Intelligent Solutions Through Code.
               </h1>
 
-              <div className="mt-5 min-h-[3rem] text-2xl font-medium tracking-[-0.04em] text-[var(--color-purple)] sm:text-3xl">
-                <span className="inline-flex min-w-[14ch] items-center">{typedWord || 'Full Stack AI Driven Developer'}</span>
+              <div className="hero-role mt-5 min-h-[3rem] text-xl font-medium tracking-[-0.04em] text-[var(--color-purple)] sm:text-2xl">
+                <span className="flex min-h-10 flex-wrap items-center">AI Engineer | Python Developer | Automation Enthusiast</span>
               </div>
 
               <p className="mt-6 max-w-xl text-lg leading-8 text-[var(--color-muted)]">
@@ -347,16 +404,20 @@ function App() {
                   Explore My Work
                   <ArrowRight className="h-4 w-4" />
                 </button>
-                <button onClick={() => handleNavClick('#contact')} className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-white px-6 py-3 text-sm font-semibold text-[var(--color-dark)] transition hover:-translate-y-0.5 hover:border-[var(--color-purple)] hover:text-[var(--color-purple)]">
+                <button onClick={() => handleNavClick('#contact')} className="hero-secondary inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-white px-6 py-3 text-sm font-semibold text-[var(--color-dark)] transition hover:-translate-y-0.5 hover:border-[var(--color-purple)] hover:text-[var(--color-purple)]">
                   Let&apos;s Connect
                 </button>
+                <a href={cvUrl} download className="inline-flex items-center gap-2 rounded-full px-3 py-3 text-sm font-semibold text-[var(--color-muted)] transition hover:text-[var(--color-purple)]">
+                  <Download className="h-4 w-4" />
+                  Download CV
+                </a>
               </div>
 
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 {socialLinks.map((link) => {
                   const Icon = link.icon
                   return (
-                    <a key={link.label} href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel={link.href.startsWith('http') ? 'noreferrer' : undefined} className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-border)] bg-white text-[var(--color-dark)] transition hover:-translate-y-0.5 hover:border-[var(--color-purple)] hover:text-[var(--color-purple)]" aria-label={link.label}>
+                    <a key={link.label} href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel={link.href.startsWith('http') ? 'noreferrer' : undefined} className="hero-social inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-border)] bg-white text-[var(--color-dark)] transition hover:-translate-y-0.5 hover:border-[var(--color-purple)] hover:text-[var(--color-purple)]" aria-label={link.label}>
                       <Icon className="h-4 w-4" />
                     </a>
                   )
@@ -365,7 +426,7 @@ function App() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.1 }} className="flex items-center justify-center">
-              <div className="portfolio-card relative w-full max-w-xl overflow-hidden rounded-[2rem] border border-[var(--color-border)] bg-white/85 p-5 shadow-[0_26px_80px_rgba(17,17,24,0.12)] backdrop-blur-sm sm:p-7">
+              <div className="hero-core portfolio-card relative w-full max-w-xl overflow-hidden rounded-[2rem] border border-[var(--color-border)] bg-white/85 p-5 shadow-[0_26px_80px_rgba(17,17,24,0.12)] backdrop-blur-sm sm:p-7">
                 <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-70 [background-image:linear-gradient(to_right,rgba(108,59,219,0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgba(108,59,219,0.045)_1px,transparent_1px)] [background-size:40px_40px]" />
                 <div aria-hidden="true" className="pointer-events-none absolute -right-10 top-4 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(232,189,83,0.15),transparent_70%)]" />
                 <div className="relative">
@@ -376,8 +437,16 @@ function App() {
                     </div>
                     <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-white/80 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-muted)]">
                       <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-yellow)]" />
-                      Live network
+                      Interactive network
                     </span>
+                  </div>
+
+                  <div className="identity-card mt-4 flex items-center gap-3 rounded-2xl border border-[var(--color-border)] bg-white/75 p-3">
+                    <img src={profileImage} alt="" width="56" height="56" className="h-14 w-14 rounded-xl object-cover object-[center_32%]" />
+                    <div className="min-w-0">
+                      <p className="font-semibold text-[var(--color-dark)]">M. Faizan Hassan</p>
+                      <p className="text-xs text-[var(--color-muted)]">AI &amp; Full Stack Development · Python &amp; FastAPI</p>
+                    </div>
                   </div>
 
                   <div className="flex min-h-[17rem] items-center justify-center py-2 sm:min-h-[19rem]">
@@ -386,9 +455,9 @@ function App() {
 
                   <div className="grid grid-cols-3 divide-x divide-[var(--color-border)] border-t border-[var(--color-border)] pt-4">
                     {[
-                      { label: 'Backend', value: 'Python · APIs' },
-                      { label: 'Intelligence', value: 'AI · Vision' },
-                      { label: 'Automation', value: 'Workflows' },
+                      { label: 'Backend', value: 'Python · FastAPI' },
+                      { label: 'Approach', value: 'Research-driven' },
+                      { label: 'Focus', value: 'AI · Automation' },
                     ].map((item) => (
                       <div key={item.label} className="px-2 first:pl-0 last:pr-0 sm:px-4">
                         <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[var(--color-muted)] sm:text-[10px]">{item.label}</p>
@@ -402,63 +471,38 @@ function App() {
           </div>
         </section>
 
-        <section id="about" className="bg-[var(--color-offwhite)] py-20">
+        <section id="about" className="about-section bg-[var(--color-offwhite)] py-24 sm:py-32">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div className="mb-12 max-w-2xl">
+            <div className="about-heading mb-14 max-w-3xl">
               <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-purple)]">
                 <Briefcase className="h-4 w-4" />
                 About Me
               </span>
-              <h2 className="mt-5 text-4xl font-semibold tracking-[-0.06em] text-[var(--color-dark)] sm:text-5xl">A Little About Me</h2>
-              <p className="mt-4 text-xl text-[var(--color-muted)]">Driven by Curiosity. Focused on Building.</p>
+              <h2 className="mt-5 text-5xl font-semibold tracking-[-0.065em] text-[var(--color-dark)] sm:text-6xl">A Little About Me</h2>
+              <p className="mt-4 text-xl text-[var(--color-muted)] sm:text-2xl">Driven by curiosity. Focused on building.</p>
             </div>
 
-            <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr]">
-              <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} className="space-y-6">
-                <div className="portfolio-card flex flex-col gap-5 rounded-[2rem] border border-[var(--color-border)] bg-white p-6 shadow-[0_20px_55px_rgba(17,17,24,0.06)]">
-                  <div className="flex items-start gap-5">
-                    <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-[1.4rem] border border-[var(--color-border)] bg-[linear-gradient(135deg,var(--color-purple),var(--color-blue))] text-2xl font-semibold text-white shadow-[0_18px_35px_rgba(108,59,219,0.18)]">
-                      {profileImage ? <img src={profileImage} alt="Portrait of M. Faizan Hassan" width="300" height="400" loading="lazy" decoding="async" className="h-full w-full object-cover object-[center_32%]" /> : 'MF'}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--color-purple)]">Developer profile</p>
-                      <h3 className="mt-1 text-2xl font-semibold text-[var(--color-dark)]">M. Faizan Hassan</h3>
-                    </div>
-                  </div>
-
-                  <p className="text-base leading-8 text-[var(--color-muted)]">
-                    I&apos;m M. Faizan Hassan, a self-driven developer with a strong interest in Python backend development, artificial intelligence, and modern software engineering.
-                  </p>
-                  <p className="text-base leading-8 text-[var(--color-muted)]">
-                    My focus is on developing practical applications, designing reliable backend architectures, working with APIs and databases, and exploring intelligent automation systems.
-                  </p>
-                  <p className="text-base leading-8 text-[var(--color-muted)]">
-                    I believe good software is more than just writing code. It requires understanding the problem, reviewing requirements carefully, selecting the right architecture, and building solutions that remain maintainable as they grow.
-                  </p>
+            <div className="about-editorial">
+              <motion.figure initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} className="about-portrait">
+                <img src={profileImage} alt="Portrait of M. Faizan Hassan" width="800" height="1000" loading="lazy" decoding="async" />
+                <figcaption className="identity-card about-caption">
+                  <span className="about-monogram">FH</span>
+                  <span><strong>M. Faizan Hassan</strong><small>AI · Backend · Automation</small></span>
+                </figcaption>
+              </motion.figure>
+              <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} className="about-copy">
+                <p className="about-lede">I&apos;m a self-driven developer with a strong interest in Python backend development, artificial intelligence, and modern software engineering.</p>
+                <p>My focus is on developing practical applications, designing reliable backend architectures, working with APIs and databases, and exploring intelligent automation systems.</p>
+                <p>I believe good software starts with understanding the problem. Research, thoughtful architecture, and maintainable implementation matter as much as the code itself.</p>
+                <div className="about-note">
+                  <Cpu className="h-5 w-5" aria-hidden="true" />
+                  <span>Learning with intention. Building toward practical AI engineering.</span>
                 </div>
-
-                <div className="flex flex-wrap gap-3">
-                  {['Python Backend Development', 'Artificial Intelligence', 'API Design', 'Automation Systems', 'Database Architecture'].map((tag) => (
-                    <span key={tag} className="rounded-full border border-[var(--color-border)] bg-white px-3 py-2 text-sm font-medium text-[var(--color-dark)]">{tag}</span>
+                <ul className="about-interests" aria-label="Technical interests">
+                  {['Python backend', 'Artificial intelligence', 'API design', 'Automation', 'Data architecture'].map((tag) => (
+                    <li key={tag}>{tag}</li>
                   ))}
-                </div>
-              </motion.div>
-
-              <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} className="space-y-4">
-                {[
-                  { icon: Cpu, title: 'Backend Engineering', description: 'I build reliable APIs and maintainable server-side systems that solve real problems with clarity and structure.' },
-                  { icon: BrainCircuit, title: 'AI & Automation', description: 'I explore practical AI workflows that convert unstructured data into useful, structured outputs and automation flows.' },
-                  { icon: Database, title: 'Data & Architecture', description: 'I care deeply about clean design decisions, data handling, and systems that remain understandable as they grow.' },
-                  { icon: Rocket, title: 'Learning & Iteration', description: 'My philosophy is grounded in research, technical reflection, and constant refinement to create better software.' },
-                ].map(({ icon: Icon, title, description }) => (
-                  <div key={title} className="portfolio-card rounded-[1.6rem] border border-[var(--color-border)] bg-white p-5 shadow-[0_18px_40px_rgba(17,17,24,0.05)]">
-                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-soft-purple)] text-[var(--color-purple)]">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-[var(--color-dark)]">{title}</h3>
-                    <p className="mt-2 text-base leading-7 text-[var(--color-muted)]">{description}</p>
-                  </div>
-                ))}
+                </ul>
               </motion.div>
             </div>
           </div>
@@ -474,31 +518,32 @@ function App() {
               <h2 className="mt-5 text-4xl font-semibold tracking-[-0.06em] text-[var(--color-dark)] sm:text-5xl">Technologies I Explore and Work With</h2>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {skillCategories.map(({ label, icon: Icon, skills }) => (
-                <motion.div key={label} initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} className="portfolio-card rounded-[2rem] border border-[var(--color-border)] bg-white p-6 shadow-[0_24px_60px_rgba(17,17,24,0.05)]">
-                  <div className="mb-5 flex items-center justify-between">
-                    <div className="flex items-center gap-3 text-lg font-semibold text-[var(--color-dark)]">
-                      <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--color-soft-purple)] text-[var(--color-purple)]">
-                        <Icon className="h-5 w-5" />
-                      </span>
-                      {label}
-                    </div>
+            <div className="skills-universe">
+              <svg className="skills-constellation" viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M500 310 235 135M500 310 765 135M500 310 235 485M500 310 765 485M500 310 500 65" />
+                <circle cx="235" cy="135" r="3" /><circle cx="765" cy="135" r="3" /><circle cx="235" cy="485" r="3" /><circle cx="765" cy="485" r="3" /><circle cx="500" cy="65" r="3" />
+              </svg>
+              <div className="skills-core" aria-hidden="true">
+                <span className="skills-core-orbit" />
+                <span className="skills-core-icon"><BrainCircuit className="h-9 w-9" /></span>
+                <small>TECHNOLOGY<br />CONSTELLATION</small>
+              </div>
+              {skillCategories.map(({ label, icon: Icon, skills }, index) => (
+                <motion.article key={label} initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} className={`skill-cluster skill-cluster-${index + 1}`}>
+                  <div className="skill-cluster-heading">
+                    <span className="skill-cluster-icon"><Icon className="h-4 w-4" /></span>
+                    <h3>{label}</h3>
                   </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {skills.map((skill) => (
-                      <span key={skill} className="rounded-full border border-[var(--color-border)] bg-[var(--color-offwhite)] px-3 py-1.5 text-sm font-medium text-[var(--color-dark)]">{skill}</span>
-                    ))}
-                  </div>
-                </motion.div>
+                  <ul>{skills.map((skill) => <li key={skill}>{skill}</li>)}</ul>
+                </motion.article>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="projects" className="bg-[var(--color-offwhite)] py-20">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <section id="projects" className="projects-section bg-[var(--color-offwhite)] py-20">
+          <CosmicBackdrop className="projects-stars" />
+          <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="mb-10 max-w-2xl">
               <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-purple)]">
                 <FileText className="h-4 w-4" />
@@ -508,46 +553,56 @@ function App() {
               <p className="mt-4 text-lg text-[var(--color-muted)]">Turning Technical Ideas Into Practical Solutions</p>
             </div>
 
-            <div className="grid gap-7 lg:grid-cols-3">
-              {projects.map((project) => (
-                <motion.article key={project.id} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} className="portfolio-card overflow-hidden rounded-[2rem] border border-[var(--color-border)] bg-white shadow-[0_24px_55px_rgba(17,17,24,0.05)]">
-                  <div className="border-b border-[var(--color-border)] bg-[var(--color-offwhite)] p-5">
-                    <div className="mb-4 flex items-center justify-between">
-                      <span className="rounded-full bg-[var(--color-soft-purple)] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--color-purple)]">{project.number}</span>
-                      <span className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--color-purple)]">{project.category}</span>
-                    </div>
-                    <h3 className="text-2xl font-semibold tracking-[-0.05em] text-[var(--color-dark)]">{project.title}</h3>
-                  </div>
+                    <div className="project-showcases">
+                      {displayedProjects.map((project, index) => {
+                        const ProjectIcon = project.id === 'sales-inventory-analytics'
+                          ? Database
+                          : project.id === 'isop'
+                            ? BrainCircuit
+                            : project.id === 'document-processing'
+                              ? Rocket
+                              : Code2
 
-                  <div className="space-y-5 p-5">
-                    <p className="text-base leading-7 text-[var(--color-muted)]">{project.description}</p>
-
-                    <div className="rounded-2xl border border-dashed border-[var(--color-purple)] bg-[var(--color-soft-purple)] p-4">
-                      <div className="flex flex-wrap gap-2">
-                        {project.technicalFocus.slice(0, 3).map((focus) => (
-                          <span key={focus} className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-[var(--color-dark)]">{focus}</span>
-                        ))}
-                      </div>
+                        return (
+                          <motion.article key={project.id} data-project={project.id} initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} className={`project-showcase portfolio-card ${index % 2 ? 'project-reverse' : ''}`}>
+                            <div className="project-art">
+                              <div className="project-art-grid" aria-hidden="true" />
+                              <span className="project-art-icon" aria-hidden="true"><ProjectIcon className="h-9 w-9" /></span>
+                              <span className="project-art-caption">{project.id === 'sales-inventory-analytics' ? 'DATA / API' : project.category.split(' / ')[0]}</span>
+                              <div className="project-art-orbit" aria-hidden="true"><i /><i /><i /><i /></div>
+                              <span className="project-art-index">{project.number}</span>
+                            </div>
+                            <div className="project-copy">
+                              <p className="project-kicker">{project.category}</p>
+                              <h3>{project.title}</h3>
+                              <p className="project-description">{project.description}</p>
+                              {project.technicalFocus.length > 0 && (
+                                <ul className="project-focus">
+                                  {project.technicalFocus.slice(0, 3).map((focus) => <li key={focus}>{focus}</li>)}
+                                </ul>
+                              )}
+                              <ul className="project-stack" aria-label="Technology stack">
+                                {project.stack.map((tech) => <li key={tech}>{tech}</li>)}
+                              </ul>
+                              <div className="project-actions">
+                                <button onClick={() => openProject(project)} className="inline-flex items-center gap-2 rounded-full bg-[var(--color-purple)] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[var(--color-purple-dark)]">
+                                  Explore project <ArrowRight className="h-4 w-4" />
+                                </button>
+                                {project.link?.startsWith('https://github.com/') && (
+                                  <a href={project.link} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] px-5 py-3 text-sm font-semibold text-[var(--color-dark)] transition hover:border-[var(--color-purple)] hover:text-[var(--color-purple)]">
+                                    <GitBranch className="h-4 w-4" /> GitHub
+                                  </a>
+                                )}
+                              </div>
+                            </div>
+                          </motion.article>
+                        )
+                      })}
                     </div>
-
-                    <div className="flex flex-wrap gap-2">
-                      {project.stack.map((tech) => (
-                        <span key={tech} className="rounded-full border border-[var(--color-border)] bg-[var(--color-offwhite)] px-2.5 py-1 text-[11px] font-medium text-[var(--color-dark)]">{tech}</span>
-                      ))}
-                    </div>
-
-                    <div className="flex gap-3 pt-2">
-                      <button onClick={() => openProject(project)} className="flex-1 rounded-full bg-[var(--color-purple)] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[var(--color-purple-dark)]">View Details</button>
-                      <a href={project.link} className="inline-flex flex-1 items-center justify-center rounded-full border border-[var(--color-border)] bg-white px-4 py-3 text-sm font-semibold text-[var(--color-dark)] transition hover:border-[var(--color-purple)] hover:text-[var(--color-purple)]">GitHub</a>
-                    </div>
-                  </div>
-                </motion.article>
-              ))}
-            </div>
           </div>
         </section>
 
-        <section id="certificates" className="py-20">
+        <section id="certificates" className="certificates-section py-20">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="mb-10 max-w-2xl">
               <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-purple)]">
@@ -559,7 +614,7 @@ function App() {
 
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
               {certificates.map((certificate, index) => (
-                <motion.button key={`${certificate.title}-${index}`} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} onClick={() => openCertificate(certificate)} className="portfolio-card group rounded-[1.8rem] border border-[var(--color-border)] bg-white p-5 text-left shadow-[0_18px_40px_rgba(17,17,24,0.04)]">
+                <motion.button key={`${certificate.title}-${index}`} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} onClick={() => openCertificate(certificate)} className="certificate-card portfolio-card group rounded-[1.8rem] border border-[var(--color-border)] bg-white p-5 text-left shadow-[0_18px_40px_rgba(17,17,24,0.04)]">
                   <div className="mb-4 flex items-center justify-between">
                     <span className="rounded-full bg-[var(--color-soft-purple)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--color-purple)]">{certificate.type}</span>
                     <span className="text-xs font-medium text-[var(--color-muted)]">{certificate.date}</span>
@@ -575,14 +630,15 @@ function App() {
           </div>
         </section>
 
-        <section id="contact" className="bg-[var(--color-dark)] py-20 text-white">
+        <section id="contact" className="contact-section bg-[var(--color-dark)] py-20 text-white">
+          <CosmicBackdrop className="contact-stars" />
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="mb-10 max-w-3xl">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-soft-blue)]">
                 <MessageCircle className="h-4 w-4" />
                 Contact
               </span>
-              <h2 className="mt-5 text-4xl font-semibold tracking-[-0.06em] text-white sm:text-5xl">Let&apos;s Build Something Meaningful</h2>
+              <h2 className="mt-5 max-w-3xl text-4xl font-semibold tracking-[-0.06em] text-white sm:text-5xl">Have an Idea? Let&apos;s Build Something Intelligent.</h2>
               <p className="mt-4 text-lg text-white/70">Have an idea, a project, or an opportunity to discuss? I&apos;m always interested in connecting with people who are passionate about technology, software development, and artificial intelligence.</p>
             </div>
 
@@ -638,6 +694,7 @@ function App() {
                   </button>
                   <a href="mailto:mfaizanhassan786@gmail.com" className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10">Use Email</a>
                 </div>
+                <p className="mt-4 text-xs leading-relaxed text-white/50">Selecting Send Message opens your email app with the message details filled in.</p>
               </form>
             </div>
           </div>
@@ -677,6 +734,17 @@ function App() {
         </div>
       </footer>
 
+      {showBackToTop && (
+        <button
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="back-to-top"
+          aria-label="Back to top"
+        >
+          <ArrowUp className="h-5 w-5" />
+        </button>
+      )}
+
       <AnimatePresence>
         {selectedProject && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-[#111118]/70 p-4 backdrop-blur-sm">
@@ -698,22 +766,24 @@ function App() {
                     <p className="leading-7">{selectedProject.problem}</p>
                   </div>
 
-                  <div>
+                  {selectedProject.approach && <div>
                     <p className="mb-2 text-sm font-semibold uppercase tracking-[0.12em] text-[var(--color-purple)]">Technical approach</p>
                     <p className="leading-7">{selectedProject.approach}</p>
-                  </div>
+                  </div>}
 
-                  <div>
-                    <p className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-[var(--color-purple)]">Architecture</p>
-                    <div className="grid gap-3 md:grid-cols-2">
-                      {selectedProject.architecture.map((block) => (
-                        <div key={block.label} className="portfolio-card rounded-2xl border border-[var(--color-border)] bg-[var(--color-offwhite)] p-4">
-                          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--color-purple)]">{block.label}</p>
-                          <p className="mt-2 text-sm text-[var(--color-dark)]">{block.value}</p>
-                        </div>
-                      ))}
+                  {selectedProject.architecture.length > 0 && (
+                    <div>
+                      <p className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-[var(--color-purple)]">Architecture</p>
+                      <div className="grid gap-3 md:grid-cols-2">
+                        {selectedProject.architecture.map((block) => (
+                          <div key={block.label} className="portfolio-card rounded-2xl border border-[var(--color-border)] bg-[var(--color-offwhite)] p-4">
+                            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--color-purple)]">{block.label}</p>
+                            <p className="mt-2 text-sm text-[var(--color-dark)]">{block.value}</p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <div>
                     <p className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-[var(--color-purple)]">Technologies</p>
@@ -724,7 +794,7 @@ function App() {
                     </div>
                   </div>
 
-                  <div>
+                  {selectedProject.highlights.length > 0 && <div>
                     <p className="mb-2 text-sm font-semibold uppercase tracking-[0.12em] text-[var(--color-purple)]">Challenges & learning</p>
                     <ul className="space-y-2 leading-7">
                       {selectedProject.highlights.map((point) => (
@@ -734,11 +804,11 @@ function App() {
                         </li>
                       ))}
                     </ul>
-                  </div>
+                  </div>}
 
-                  <div className="portfolio-card rounded-2xl border border-[var(--color-border)] bg-[var(--color-offwhite)] p-4 text-sm text-[var(--color-dark)]">
+                  {selectedProject.learnings && <div className="portfolio-card rounded-2xl border border-[var(--color-border)] bg-[var(--color-offwhite)] p-4 text-sm text-[var(--color-dark)]">
                     <span className="font-semibold text-[var(--color-purple)]">Outcome:</span> {selectedProject.learnings}
-                  </div>
+                  </div>}
                 </div>
               </div>
             </motion.div>
@@ -781,6 +851,7 @@ function App() {
         )}
       </AnimatePresence>
     </div>
+    </MotionConfig>
   )
 }
 

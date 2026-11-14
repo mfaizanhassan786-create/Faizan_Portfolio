@@ -3,22 +3,23 @@
 :root {
   --color-white: #ffffff;
   --color-offwhite: #f8f8fc;
-  --color-soft-gray: #e8e8f0;
-  --color-purple: #6c3bdb;
-  --color-purple-dark: #5530b3;
-  --color-soft-purple: rgba(108, 59, 219, 0.08);
-  --color-blue: #3478f6;
-  --color-soft-blue: rgba(52, 120, 246, 0.12);
-  --color-yellow: #e8bd53;
-  --color-soft-yellow: rgba(232, 189, 83, 0.08);
-  --color-dark: #111118;
-  --color-muted: #4d4d5f;
-  --color-border: rgba(17, 17, 24, 0.08);
-  --shadow-soft: 0 18px 45px rgba(17, 17, 24, 0.06);
+  --color-soft-gray: #d9d8e1;
+  --color-purple: #6738db;
+  --color-purple-dark: #5129bb;
+  --color-soft-purple: rgba(103, 56, 219, 0.08);
+  --color-blue: #397bff;
+  --color-soft-blue: rgba(57, 123, 255, 0.12);
+  --color-yellow: #f3c94b;
+  --color-soft-yellow: rgba(243, 201, 75, 0.12);
+  --color-dark: #171522;
+  --color-muted: #585667;
+  --color-border: rgba(23, 21, 34, 0.1);
+  --shadow-soft: 0 18px 45px rgba(23, 21, 34, 0.08);
 }
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
@@ -26,7 +27,7 @@ body {
   min-width: 320px;
   background: var(--color-offwhite);
   color: var(--color-dark);
-  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-family: Inter, 'Segoe UI', sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -38,16 +39,17 @@ body {
 
 .portfolio-card {
   transition:
-    translate 0.3s cubic-bezier(0.2, 0.75, 0.25, 1),
-    box-shadow 0.3s cubic-bezier(0.2, 0.75, 0.25, 1),
-    border-color 0.3s cubic-bezier(0.2, 0.75, 0.25, 1);
+    translate 0.38s cubic-bezier(0.2, 0.75, 0.25, 1),
+    box-shadow 0.38s cubic-bezier(0.2, 0.75, 0.25, 1),
+    border-color 0.38s cubic-bezier(0.2, 0.75, 0.25, 1),
+    background-color 0.3s ease;
 }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .portfolio-card:hover {
     translate: 0 -7px;
-    border-color: rgba(108, 59, 219, 0.42);
-    box-shadow: 0 26px 58px rgba(108, 59, 219, 0.13), 0 8px 20px rgba(17, 17, 24, 0.06);
+    border-color: rgba(103, 56, 219, 0.42);
+    box-shadow: 0 26px 58px rgba(103, 56, 219, 0.13), 0 8px 20px rgba(23, 21, 34, 0.06);
   }
 }
 
@@ -63,6 +65,21 @@ button {
 
 a {
   text-decoration: none;
+}
+
+button,
+a,
+input,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--color-blue);
+  outline-offset: 3px;
 }
 
 img {
