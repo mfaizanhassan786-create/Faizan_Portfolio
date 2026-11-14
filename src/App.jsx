@@ -387,7 +387,7 @@ function App() {
                 <span className="eyebrow-pill rounded-full bg-[var(--color-soft-purple)] px-3 py-1.5 text-[var(--color-purple)]">AI · BACKEND · AUTOMATION</span>
               </div>
 
-              <h1 className="hero-title max-w-3xl text-5xl font-semibold tracking-[-0.06em] text-[var(--color-dark)] sm:text-6xl lg:text-[5rem]">
+              <h1 className="hero-title max-w-[12ch] text-[3.2rem] font-bold tracking-[-0.08em] text-white sm:text-[4.5rem] lg:text-[7.2rem]">
                 Building Intelligent Solutions Through Code.
               </h1>
 
