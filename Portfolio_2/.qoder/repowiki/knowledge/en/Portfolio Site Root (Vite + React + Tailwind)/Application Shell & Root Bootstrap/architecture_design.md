@@ -1,5 +1,0 @@
-Three-file leaf that forms the app's entry point and shell:
-- `src/main.jsx` is the ReactDOM bootstrap: creates a root via `ReactDOM.createRoot`, wraps `<App />` in `React.StrictMode`, and imports the global stylesheet.
-- `src/App.jsx` is the top-level layout component. It composes page sections (`Navbar`, `Hero`, `About`, `Skills`, `Projects`, `Certificates`, `Contact`, `Footer`) from `./components/*`, renders them inside a semantic `<main id="main-content">` with a skip-link anchor for keyboard navigation, and applies a paper-themed background via Tailwind classes.
-- `src/index.css` is the single source of global styles, structured with Tailwind's `@layer` directive into `base` (CSS custom properties for colors like `--paper`, `--brand`, `--ink`; typography defaults; focus-visible/scrollbar styling), `components` (`.container-page`, `.skip-link`), and `utilities` (background grid/mask helpers, gradient text, scrollbar hiding). A `prefers-reduced-motion` media query disables animations globally.
-Dependency direction is one-way: this module depends on `./components/*` but nothing above it — it is the root of the React tree.

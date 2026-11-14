@@ -1,1 +1,0 @@
-React 18+ with `react-dom/client`'s `createRoot` API, Tailwind CSS v3+ using `@tailwind base/components/utilities` directives and `@layer` scoping, plus CSS custom properties for the design token palette.

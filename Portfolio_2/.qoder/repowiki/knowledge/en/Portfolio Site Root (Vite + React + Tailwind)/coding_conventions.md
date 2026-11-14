@@ -1,2 +1,0 @@
-- Component styles use Tailwind utility classes referencing the shared color names (`ink`, `paper`, `brand`, `accent`) and animation keys (`fade-up`, `caret`, `drift`) defined in `tailwind.config.js` rather than arbitrary values.
-- Fonts are loaded via Google Fonts preconnect links in `index.html` and referenced through the `display`, `sans`, and `mono` font families extended in Tailwind.

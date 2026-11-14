@@ -1,1 +1,0 @@
-Vite 5 + React 18 + Framer Motion + Lucide icons, styled with Tailwind 3 via PostCSS/Autoprefixer; ESM-only package (`"type": "module"`).

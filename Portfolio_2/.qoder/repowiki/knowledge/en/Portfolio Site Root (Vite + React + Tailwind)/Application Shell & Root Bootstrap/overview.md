@@ -1,1 +1,0 @@
-Bootstraps the React application, mounts the root component tree, and defines global CSS tokens, layout utilities, and accessibility styles for the portfolio site.

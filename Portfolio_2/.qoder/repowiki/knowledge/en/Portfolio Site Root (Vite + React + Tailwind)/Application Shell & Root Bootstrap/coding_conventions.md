@@ -1,3 +1,0 @@
-- Global style rules are organized under Tailwind's `@layer` blocks (`base`, `components`, `utilities`) rather than flat selectors.
-- Design tokens (colors, fonts) are exposed as CSS custom properties on `:root` and consumed throughout via Tailwind utility classes (e.g. `bg-paper`, `text-ink`).
-- Accessibility is handled at the shell level via a visible-on-focus skip-link targeting `#main-content` and a global `:focus-visible` outline rule.
